@@ -9,7 +9,7 @@ Django 示例项目，作为相关项目的基础实践规范。
 ### 构建镜像
 
 ```bash
-docker build --tag lab-django-demo/lasted .
+docker build --tag lab-django-demo:latest .
 ```
 
 ### 启动容器
@@ -22,7 +22,7 @@ docker container run \
   --interactive \
   --detach \
   --restart unless-stopped \
-  lab-django-demo/lasted
+  lab-django-demo:latest
 ```
 
 ## 依赖
