@@ -18,11 +18,19 @@ docker build --tag lab-django-demo:latest .
 docker container run \
   --name lab-django-demo \
   --publish 10301:80 \
+  --volume /dyai-app/back-end/lab-django-demo/logs:/app/logs \
   --env TZ=Asia/Shanghai \
   --interactive \
   --detach \
   --restart unless-stopped \
   lab-django-demo:latest
+```
+
+### 删除服务
+
+```bash
+docker container rm -f lab-django-demo
+docker image rm lab-django-demo:latest
 ```
 
 ## 依赖

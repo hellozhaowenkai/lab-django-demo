@@ -1,22 +1,28 @@
 FROM python:3-alpine
 
-ENV PYTHONUNBUFFERED 1
+ENV PYTHONUNBUFFERED=1
 
 WORKDIR /app
 
-RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.tuna.tsinghua.edu.cn/g' /etc/apk/repositories && \
-  apk update && \
-  apk add --no-cache alpine-sdk mariadb-connector-c mariadb-connector-c-dev && \
-  apk add --no-cache gcc make libc-dev linux-headers pcre-dev
+# Alpine
+RUN echo "START" \
+  && sed -i "s/dl-cdn.alpinelinux.org/mirrors.tuna.tsinghua.edu.cn/g" /etc/apk/repositories \
+  && apk update \
+  && apk add --virtual mysqlclient-need \
+    --no-cache alpine-sdk mariadb-connector-c mariadb-connector-c-dev \
+  && apk add --virtual uwsgi-need \
+    --no-cache gcc make libc-dev linux-headers pcre-dev \
+  # && apk del mysqlclient-need uwsgi-need \
+  && echo "END"
 
 COPY requirements.txt ./
 
 RUN pip install --no-cache-dir \
-    -i https://pypi.tuna.tsinghua.edu.cn/simple/ \
-    -r requirements.txt
+  --index-url https://pypi.tuna.tsinghua.edu.cn/simple/ \
+  --requirement requirements.txt
 
 COPY . .
 
 EXPOSE 80
 
-ENTRYPOINT ["sh", "./run/entry-point.sh"]
+ENTRYPOINT ["/bin/sh", "./run/entry-point.sh"]

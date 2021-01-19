@@ -1,6 +1,8 @@
 # Django
 django==3.1.5
+
+# MySQL DB API Drivers
+mysqlclient==2.0.3
+
 # uWSGI
 uwsgi==2.0.19
-# MySQL
-mysqlclient==2.0.3
