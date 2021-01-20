@@ -1,6 +1,7 @@
 FROM python:3-alpine
 
 ENV PYTHONUNBUFFERED=1
+# ENV DJANGO_SETTINGS_MODULE=mysite.config.production
 
 WORKDIR /app
 
@@ -23,6 +24,11 @@ RUN pip install --no-cache-dir \
 
 COPY . .
 
+# TODO: Need To Be Optimized.
+RUN chmod 777 /app/logs
+
 EXPOSE 80
 
 ENTRYPOINT ["/bin/sh", "./run/entry-point.sh"]
+
+CMD ["-m", "production"]

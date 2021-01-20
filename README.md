@@ -4,6 +4,14 @@
 
 Django 示例项目，作为相关项目的基础实践规范。
 
+## 开发
+
+### 启动服务
+
+```bash
+sh run/entry-point.sh
+```
+
 ## Docker
 
 ### 构建镜像
