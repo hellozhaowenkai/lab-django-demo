@@ -1,7 +1,7 @@
 FROM python:3-alpine
 
 ENV PYTHONUNBUFFERED=1
-# ENV DJANGO_SETTINGS_MODULE=mysite.config.production
+# ENV DJANGO_SETTINGS_MODULE=my_site.config.production
 
 WORKDIR /app
 

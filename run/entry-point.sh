@@ -21,7 +21,7 @@ done
 case $MODE in
   development)
     # DEVELOPMENT mode
-    export DJANGO_SETTINGS_MODULE=mysite.config.development
+    export DJANGO_SETTINGS_MODULE=my_site.config.development
     python manage.py makemigrations
     python manage.py migrate
     python manage.py runserver
@@ -29,7 +29,7 @@ case $MODE in
 
   production)
     # PRODUCTION mode
-    export DJANGO_SETTINGS_MODULE=mysite.config.production
+    export DJANGO_SETTINGS_MODULE=my_site.config.production
     python manage.py makemigrations
     python manage.py migrate
     uwsgi --ini run/uwsgi.ini
@@ -37,7 +37,7 @@ case $MODE in
 
   test)
     # TEST mode
-    export DJANGO_SETTINGS_MODULE=mysite.config.test
+    export DJANGO_SETTINGS_MODULE=my_site.config.test
     python manage.py test
     ;;
 esac
