@@ -29,6 +29,6 @@ RUN chmod 777 /app/logs
 
 EXPOSE 80
 
-ENTRYPOINT ["/bin/sh", "./run/entry-point.sh"]
+ENTRYPOINT ["/bin/sh", "./entry-point.sh"]
 
 CMD ["-m", "production"]

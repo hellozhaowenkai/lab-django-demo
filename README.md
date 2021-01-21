@@ -9,7 +9,11 @@ Django 示例项目，作为相关项目的基础实践规范。
 ### 启动服务
 
 ```bash
+# do
 sh run/entry-point.sh
+
+# or
+python manage.py runserver --settings my_site.config.development
 ```
 
 ## Docker

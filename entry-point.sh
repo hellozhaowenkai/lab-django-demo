@@ -5,23 +5,23 @@
 MODE=development
 
 # Get options
-while getopts "m:h" OPT; do
-  case $OPT in
+while getopts m:h OPT; do
+  case ${OPT} in
     m)
-      MODE="$OPTARG"
+      MODE=${OPTARG}
       ;;
     h)
-      echo "Usage: `basename $0` -m [development|production|test]"
+      echo "Usage: $(basename $0) -m [development|production|test]"
       exit
       ;;
   esac
 done
 
 # Run Django server
-case $MODE in
+case ${MODE} in
   development)
     # DEVELOPMENT mode
-    export DJANGO_SETTINGS_MODULE=my_site.config.development
+    export DJANGO_SETTINGS_MODULE=my_site.config.${MODE}
     python manage.py makemigrations
     python manage.py migrate
     python manage.py runserver
@@ -29,7 +29,7 @@ case $MODE in
 
   production)
     # PRODUCTION mode
-    export DJANGO_SETTINGS_MODULE=my_site.config.production
+    export DJANGO_SETTINGS_MODULE=my_site.config.${MODE}
     python manage.py makemigrations
     python manage.py migrate
     uwsgi --ini run/uwsgi.ini
@@ -37,7 +37,7 @@ case $MODE in
 
   test)
     # TEST mode
-    export DJANGO_SETTINGS_MODULE=my_site.config.test
+    export DJANGO_SETTINGS_MODULE=my_site.config.${MODE}
     python manage.py test
     ;;
 esac
