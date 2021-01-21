@@ -28,7 +28,7 @@ INSTALLED_APPS = [
     "my_app",
 ]
 
-LANGUAGE_CODE = "zh-hans"
+# LANGUAGE_CODE = "zh-hans"
 
 TIME_ZONE = "Asia/Shanghai"
 
