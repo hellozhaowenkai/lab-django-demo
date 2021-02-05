@@ -22,6 +22,6 @@ from django.views.debug import default_urlconf
 
 urlpatterns = [
     path("", include("my_app.urls")),
-    path("home/", default_urlconf, name="default_urlconf"),
-    path("admin/", admin.site.urls),
+    path("home/", default_urlconf, name="home"),
+    path("admin/", admin.site.urls, name="admin"),
 ]

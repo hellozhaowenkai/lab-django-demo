@@ -30,6 +30,7 @@ INSTALLED_APPS = [
 
 # LANGUAGE_CODE = "zh-hans"
 
+USE_TZ = False
 TIME_ZONE = "Asia/Shanghai"
 
 # STATIC_URL = "./static/"
