@@ -1,5 +1,5 @@
-from django.urls import path, re_path, include
-from my_site.rest.routers import APIRouter
+from django.urls import path
+from my_site.restful.routers import APIRouter
 from my_app import views
 
 
@@ -8,5 +8,5 @@ from my_app import views
 urlpatterns = [
     path("hi/", views.hi, name="hi"),
     path("error/", views.error, name="error"),
-    APIRouter("like/").register(views.LikeListView, views.LikeDetailView),
+    APIRouter("like/", views.LikeViewSet).urls,
 ]

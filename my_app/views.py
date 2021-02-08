@@ -1,5 +1,5 @@
-from my_site.rest.response import APIResponse, ErrorAPIResponse
-from my_site.rest.views import APIListView, APIDetailView
+from my_site.restful.response import APIResponse, ErrorAPIResponse
+from my_site.restful.views import APIViewSet
 from my_app.models import LikeModel
 
 # Create your views here.
@@ -13,10 +13,5 @@ def error(request):
     return ErrorAPIResponse("100100")
 
 
-class LikeListView(APIListView):
-    model = LikeModel
-    queryset = model.objects.exclude(is_deleted=True)
-
-
-class LikeDetailView(APIDetailView):
+class LikeViewSet(APIViewSet):
     model = LikeModel

@@ -1,18 +1,18 @@
 from django.db import IntegrityError
-from django.core.paginator import InvalidPage
+from django.core.paginator import InvalidPage, Paginator
 from django.http import Http404
 from django.core.exceptions import FieldError, ValidationError, MultipleObjectsReturned
 
 from django.http.request import validate_host
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
-from django.views.generic.detail import BaseDetailView
-from django.views.generic.list import BaseListView
+from django.views.generic.base import View
+from django.views.generic.detail import SingleObjectMixin
 from django.conf import settings
-from my_site.rest.response import (
+
+from my_site.restful.response import (
     APIResponse,
     ErrorAPIResponse,
-    ItemAPIResponse,
     CollectionAPIResponse,
     OperationAPIResponse,
 )
@@ -20,26 +20,58 @@ from my_site.rest.response import (
 import json
 
 
-class APIBaseView:
+class APIViewSet(SingleObjectMixin, View):
     """
     Intentionally simple parent class for all API views.
     """
 
-    CORS_ALLOWED_ORIGINS = tuple(settings.ALLOWED_HOSTS)
-    CORS_BLOCKED_ORIGINS = tuple([])
+    # View
+    model = None
+    queryset = None
+    http_method_names = [
+        "head",
+        "options",
+        "get",
+        "post",
+        "patch",
+        "put",
+        "delete",
+    ]
 
+    # SingleObjectMixin
+    pk_url_kwarg = "pk"
     slug_field = "uuid"
+    slug_url_kwarg = "uuid"
+    query_pk_and_slug = False
 
-    @classmethod
-    def corsable(cls, response, request):
+    # MultipleObjectMixin
+    allow_empty = True
+    paginate_by = 100
+    paginate_orphans = 0
+    paginator_class = Paginator
+    page_kwarg = "page"
+    ordering = "pk"
+
+    # ContextMixin
+    context_object_name = "result"
+    extra_context = None
+
+    # APIViewSetMixin
+    actions = None
+
+    # CORSMixin
+    cors_allowed_origins = tuple(settings.ALLOWED_HOSTS)
+    cors_blocked_origins = tuple([])
+
+    def corsable(self, response, request):
         """The Cross-Origin Resource Sharing request support handler"""
 
         # Indicates where a fetch originates from.
         origin = request.headers.get("Origin")
 
         if (origin is not None) and (
-            validate_host(origin, cls.CORS_ALLOWED_ORIGINS)
-            and not validate_host(origin, cls.CORS_BLOCKED_ORIGINS)
+            validate_host(origin, self.cors_allowed_origins)
+            and not validate_host(origin, self.cors_blocked_origins)
         ):
             # Indicates whether the response can be shared.
             response["Access-Control-Allow-Origin"] = origin
@@ -71,6 +103,24 @@ class APIBaseView:
 
             # To indicate to clients that server responses will differ based on the value of the Origin request header.
             response["Vary"] = "Origin"
+
+    def setup(self, request, *args, **kwargs):
+        """Initialize attributes shared by all view methods."""
+
+        # Bind methods to actions
+        actions = self.actions or {}
+        for method, action in actions.items():
+            handler = getattr(self, action)
+            setattr(self, method, handler)
+
+        return super().setup(request, *args, **kwargs)
+
+    def get_context_data(self, data):
+        context = {self.context_object_name: data}
+
+        if self.extra_context is not None:
+            context.update(self.extra_context)
+        return context
 
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
@@ -111,56 +161,54 @@ class APIBaseView:
 
         return super().options(self, request, *args, **kwargs)
 
-
-class APIListView(APIBaseView, BaseListView):
-    """
-    A base API view for displaying a list of objects.
-    """
-
-    DEFAULT_PAGE_SIZE = 100
-    DEFAULT_PAGE_NUMBER = 1
-    DEFAULT_ORDER_BY = "pk"
-
-    def get(self, request, *args, **kwargs):
+    def list(self, request, *args, **kwargs):
         """Return the current paginated collection value of multiple objects."""
 
-        page_size = request.GET.get("size") or self.DEFAULT_PAGE_SIZE
-        page_number = request.GET.get("page") or self.DEFAULT_PAGE_NUMBER
-        order_by = request.GET.get("order_by") or self.DEFAULT_ORDER_BY
-
-        queryset = self.get_queryset()
-        ordered_queryset = queryset.order_by(order_by)
-        return CollectionAPIResponse(
-            ordered_queryset, page_size=page_size, page_number=page_number
+        order_by = request.GET.get("order_by") or self.ordering
+        page_size = request.GET.get("size") or self.paginate_by
+        page_number = (
+            self.kwargs.get(self.page_kwarg)
+            or self.request.GET.get(self.page_kwarg)
+            or 1
         )
 
-    def post(self, request, *args, **kwargs):
-        """Create a new object based on the data provided, or submit a command."""
+        queryset = self.get_queryset().exclude(is_deleted=True)
+        ordered_queryset = queryset.order_by(order_by)
+        paginator = self.paginator_class(
+            ordered_queryset,
+            page_size,
+            orphans=self.paginate_orphans,
+            allow_empty_first_page=self.allow_empty,
+        )
+        page = paginator.page(page_number)
+        context = self.get_context_data(page.object_list)
+        return CollectionAPIResponse(context, formatter_params={"page": page})
 
-        new_object = self.model.objects.create()
-        return OperationAPIResponse(new_object)
-
-
-class APIDetailView(APIBaseView, BaseDetailView):
-    """
-    A base API view for displaying a single object.
-    """
-
-    def get(self, request, *args, **kwargs):
+    def detail(self, request, *args, **kwargs):
         """Return the current value of an object."""
 
         target_object = self.get_object()
-        return ItemAPIResponse(target_object)
+        context = self.get_context_data(target_object)
+        return APIResponse(context)
 
-    def patch(self, request, *args, **kwargs):
+    def create(self, request, *args, **kwargs):
+        """Create a new object based on the data provided, or submit a command."""
+
+        data = json.loads(request.body)
+        new_object = self.model.objects.create(**data)
+        context = self.get_context_data(new_object)
+        return OperationAPIResponse(context)
+
+    def update(self, request, *args, **kwargs):
         """Apply a partial update to an object."""
 
         data = json.loads(request.body)
         target_object = self.get_object()
         target_object.update(**data)
-        return OperationAPIResponse(target_object)
+        context = self.get_context_data(target_object)
+        return OperationAPIResponse(context)
 
-    def put(self, request, *args, **kwargs):
+    def update_or_create(self, request, *args, **kwargs):
         """Replace an object, or create a named object, when applicable."""
 
         data = json.loads(request.body)
@@ -171,11 +219,13 @@ class APIDetailView(APIBaseView, BaseDetailView):
             target_object = self.model.objects.create(**kwargs)
         target_object.update(**data)
 
-        return OperationAPIResponse(target_object)
+        context = self.get_context_data(target_object)
+        return OperationAPIResponse(context)
 
-    def delete(self, request, *args, **kwargs):
+    def drop(self, request, *args, **kwargs):
         """Delete an object."""
 
         target_object = self.get_object()
         target_object.delete()
-        return OperationAPIResponse(target_object)
+        context = self.get_context_data(target_object)
+        return OperationAPIResponse(context)

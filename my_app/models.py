@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-from my_site.rest.models import APIModel
+from my_site.restful.models import APIModel
 
 
 # Create your models here.
