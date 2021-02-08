@@ -31,6 +31,7 @@ docker container run \
   --name lab-django-demo \
   --publish 10301:80 \
   --volume /dyai-app/back-end/lab-django-demo/logs:/app/logs \
+  --volume /dyai-data/back-end/lab-django-demo/db.sqlite3:/app/db.sqlite3 \
   --env TZ=Asia/Shanghai \
   --interactive \
   --detach \

@@ -5,7 +5,6 @@ ENV PYTHONUNBUFFERED=1
 
 WORKDIR /app
 
-# Alpine
 RUN echo "START" \
   && sed -i "s/dl-cdn.alpinelinux.org/mirrors.tuna.tsinghua.edu.cn/g" /etc/apk/repositories \
   && apk update \
@@ -18,14 +17,16 @@ RUN echo "START" \
 
 COPY requirements.txt ./
 
-RUN pip install --no-cache-dir \
-  --index-url https://pypi.tuna.tsinghua.edu.cn/simple/ \
-  --requirement requirements.txt
+RUN echo "START" \
+  && pip install --no-cache-dir \
+    --index-url https://pypi.tuna.tsinghua.edu.cn/simple/ \
+    --requirement requirements.txt \
+  && echo "END"
 
 COPY . .
 
 # TODO: Need To Be Optimized.
-RUN chmod 777 /app/logs
+RUN chmod -R 777 .
 
 EXPOSE 80
 

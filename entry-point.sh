@@ -1,4 +1,4 @@
-#! /bin/sh
+#!/bin/sh
 # TODO: Need To Be Optimized.
 
 # Default mode is DEVELOPMENT
@@ -11,7 +11,7 @@ while getopts m:h OPT; do
       MODE=${OPTARG}
       ;;
     h)
-      echo "Usage: $(basename $0) -m [development|production|test]"
+      echo "Usage: $(basename $0) -m [development | production | test]"
       exit
       ;;
   esac
