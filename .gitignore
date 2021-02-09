@@ -1,5 +1,6 @@
 # Customize options
 /logs/*
+/databases/*
 !.gitkeep
 
 

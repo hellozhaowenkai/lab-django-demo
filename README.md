@@ -31,7 +31,7 @@ docker container run \
   --name lab-django-demo \
   --publish 10301:80 \
   --volume /dyai-app/back-end/lab-django-demo/logs:/app/logs \
-  --volume /dyai-data/back-end/lab-django-demo/db.sqlite3:/app/db.sqlite3 \
+  --volume /dyai-data/back-end/lab-django-demo/databases:/app/databases \
   --env TZ=Asia/Shanghai \
   --interactive \
   --detach \
@@ -44,6 +44,12 @@ docker container run \
 ```bash
 docker container rm -f lab-django-demo
 docker image rm lab-django-demo:latest
+```
+
+### 查看日志
+
+```bash
+docker container logs lab-django-demo
 ```
 
 ## 依赖

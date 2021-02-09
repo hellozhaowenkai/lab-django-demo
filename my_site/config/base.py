@@ -28,6 +28,13 @@ INSTALLED_APPS = [
     "my_app",
 ]
 
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": BASE_DIR / "databases" / "db.sqlite3",
+    }
+}
+
 # LANGUAGE_CODE = "zh-hans"
 
 USE_TZ = False
