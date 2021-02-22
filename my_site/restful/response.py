@@ -4,8 +4,6 @@ from django.core.serializers import serialize
 from django.core.serializers.json import DjangoJSONEncoder
 from django.utils.timezone import now
 
-import json
-
 
 class APIEncoder(DjangoJSONEncoder):
     """
@@ -31,7 +29,7 @@ class APIEncoder(DjangoJSONEncoder):
             iterable = [obj]
             return self.jsonable(iterable)[0]
 
-        return json.loads(serialize("json", obj))
+        return serialize("python", obj)
 
 
 class APIResponse(JsonResponse):
@@ -65,7 +63,7 @@ class ErrorAPIResponse(APIResponse):
         # DATABASE
         "100100": "NotFound: No target found matching the query.",
         "100101": "MultipleObjectsReturned: The query returned multiple objects when only one was expected.",
-        "100102": "IntegrityError: The primary keys must be unique.",
+        "100102": "IntegrityError: Some kind of problem with a valid index.",
         "100103": "FieldError: Some kind of problem with a model field.",
         "100104": "ValueError: Some fields do not exist in this model or are m2m fields.",
         "100105": "ValidationError: Enter a valid value.",

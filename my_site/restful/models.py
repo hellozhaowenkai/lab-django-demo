@@ -25,6 +25,12 @@ class APIModel(models.Model):
             if field in self.DISABLE_UPDATE_FIELDS:
                 raise FieldError(f"The field {field} is a disable update field.")
 
+            # models.ForeignKey
+            if isinstance(getattr(self, field), models.Model):
+                field = f"{field}_id"
+            # TODO: models.OneToOneField
+            # TODO: models.ManyToManyField
+
             setattr(self, field, value)
             update_fields.append(field)
 

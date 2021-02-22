@@ -122,6 +122,14 @@ class APIViewSet(SingleObjectMixin, View):
             context.update(self.extra_context)
         return context
 
+    @classmethod
+    def get_verbose_name(cls):
+        return cls.model._meta.verbose_name
+
+    @classmethod
+    def get_verbose_name_plural(cls):
+        return cls.model._meta.verbose_name_plural
+
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
         """Try to dispatch to the right method."""
@@ -173,7 +181,8 @@ class APIViewSet(SingleObjectMixin, View):
         )
 
         queryset = self.get_queryset().exclude(is_deleted=True)
-        ordered_queryset = queryset.order_by(order_by)
+        filtered_queryset = queryset.filter(**kwargs)
+        ordered_queryset = filtered_queryset.order_by(order_by)
         paginator = self.paginator_class(
             ordered_queryset,
             page_size,
@@ -195,7 +204,8 @@ class APIViewSet(SingleObjectMixin, View):
         """Create a new object based on the data provided, or submit a command."""
 
         data = json.loads(request.body)
-        new_object = self.model.objects.create(**data)
+        new_object = self.model.objects.create(**kwargs)
+        new_object.update(**data)
         context = self.get_context_data(new_object)
         return OperationAPIResponse(context)
 
