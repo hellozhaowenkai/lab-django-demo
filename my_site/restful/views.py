@@ -116,6 +116,8 @@ class APIViewSet(SingleObjectMixin, View):
         return super().setup(request, *args, **kwargs)
 
     def get_context_data(self, data):
+        """Insert the result into the context dict."""
+
         context = {self.context_object_name: data}
 
         if self.extra_context is not None:
@@ -124,10 +126,14 @@ class APIViewSet(SingleObjectMixin, View):
 
     @classmethod
     def get_verbose_name(cls):
+        """A human-readable name for the object, singular."""
+
         return cls.model._meta.verbose_name
 
     @classmethod
     def get_verbose_name_plural(cls):
+        """The plural name for the object."""
+
         return cls.model._meta.verbose_name_plural
 
     @method_decorator(csrf_exempt)

@@ -6,23 +6,15 @@ class APIRouter:
     The RESTful style API Router.
     """
 
-    base_urls = {
-        "": {
-            "get": "list",
-            "post": "create",
-        },
-        "<int:pk>/": {
-            "get": "detail",
-            "put": "update_or_create",
-            "patch": "update",
-            "delete": "drop",
-        },
-        "<uuid:uuid>/": {
-            "get": "detail",
-            "put": "update_or_create",
-            "patch": "update",
-            "delete": "drop",
-        },
+    list_actions = {
+        "get": "list",
+        "post": "create",
+    }
+    detail_actions = {
+        "get": "detail",
+        "put": "update_or_create",
+        "patch": "update",
+        "delete": "drop",
     }
 
     def __init__(self, view_set):
@@ -32,21 +24,25 @@ class APIRouter:
         self.patterns = []
         self.sub_patterns = []
 
-        for url, actions in self.base_urls.items():
-            self.register(url, actions)
+        self.register("", self.list_actions)
+        for rest_key in self.rest_keys:
+            self.register(f"{rest_key}/", self.detail_actions)
+
+    @property
+    def rest_keys(self):
+        return "<int:pk>", "<uuid:uuid>"
+
+    @property
+    def sub_rest_keys(self):
+        return f"<int:{self.verbose_name}_id>", f"<uuid:{self.verbose_name}__uuid>"
 
     @property
     def urls(self):
-        self.patterns.append(
-            path(f"<int:{self.verbose_name}_id>/", include(self.sub_patterns))
-        )
-        self.patterns.append(
-            path(f"<uuid:{self.verbose_name}__uuid>/", include(self.sub_patterns))
-        )
+        for sub_rest_key in self.sub_rest_keys:
+            self.patterns.append(path(f"{sub_rest_key}/", include(self.sub_patterns)))
         return path(f"{self.verbose_name_plural}/", include(self.patterns))
 
     def register(self, url, actions):
-        """The RESTful style URL register."""
 
         self.patterns.append(
             path(

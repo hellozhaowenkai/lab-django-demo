@@ -1,4 +1,5 @@
 from django.core.exceptions import FieldError
+from django.db.models.fields.related_descriptors import ForwardManyToOneDescriptor
 from django.db import models
 
 import uuid
@@ -26,10 +27,12 @@ class APIModel(models.Model):
                 raise FieldError(f"The field {field} is a disable update field.")
 
             # models.ForeignKey
-            if isinstance(getattr(self, field), models.Model):
-                field = f"{field}_id"
             # TODO: models.OneToOneField
             # TODO: models.ManyToManyField
+            if isinstance(
+                getattr(self._meta.concrete_model, field), ForwardManyToOneDescriptor
+            ):
+                field = f"{field}_id"
 
             setattr(self, field, value)
             update_fields.append(field)
