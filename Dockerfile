@@ -25,9 +25,6 @@ RUN echo "START" \
 
 COPY . .
 
-# TODO: Need To Be Optimized.
-RUN chmod -R 777 .
-
 EXPOSE 80
 
 ENTRYPOINT ["/bin/sh", "./entry-point.sh"]

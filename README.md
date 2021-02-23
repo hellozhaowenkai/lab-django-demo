@@ -28,6 +28,7 @@ docker build --tag lab-django-demo:latest .
 
 ```bash
 docker container run \
+  --user $(id -u) \
   --name lab-django-demo \
   --publish 10301:80 \
   --volume /dyai-app/back-end/lab-django-demo/logs:/app/logs \
@@ -66,4 +67,3 @@ pipreqs .
 ```bash
 pip install -r requirements.txt
 ```
-
