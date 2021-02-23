@@ -60,6 +60,8 @@ class ErrorAPIResponse(APIResponse):
     """
 
     ERROR_STATUS_CODE = {
+        # EXAMPLE
+        "100000": "Example: This is an example error message.",
         # DATABASE
         "100100": "NotFound: No target found matching the query.",
         "100101": "MultipleObjectsReturned: The query returned multiple objects when only one was expected.",

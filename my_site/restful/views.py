@@ -154,7 +154,7 @@ class APIViewSet(SingleObjectMixin, View):
             return ErrorAPIResponse("100102")
         except FieldError:
             return ErrorAPIResponse("100103")
-        except ValueError:
+        except (ValueError, AttributeError):
             return ErrorAPIResponse("100104")
         except ValidationError:
             return ErrorAPIResponse("100105")

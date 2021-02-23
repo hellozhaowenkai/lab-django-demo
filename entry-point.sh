@@ -30,8 +30,8 @@ case ${MODE} in
   production)
     # PRODUCTION mode
     export DJANGO_SETTINGS_MODULE=my_site.config.${MODE}
-    python manage.py makemigrations
-    python manage.py migrate
+    python manage.py makemigrations --no-input
+    python manage.py migrate --no-input
     uwsgi --ini run/uwsgi.ini
     ;;
 

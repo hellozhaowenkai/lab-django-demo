@@ -10,7 +10,7 @@ def hi(request):
 
 
 def error(request):
-    return ErrorAPIResponse("100100")
+    return ErrorAPIResponse("100000")
 
 
 class Like(APIViewSet):

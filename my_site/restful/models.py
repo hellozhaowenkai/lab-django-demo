@@ -1,8 +1,20 @@
+from django.db import models
 from django.core.exceptions import FieldError
 from django.db.models.fields.related_descriptors import ForwardManyToOneDescriptor
-from django.db import models
+from django.db.models.expressions import Combinable
 
 import uuid
+
+
+class APICounterField(models.PositiveIntegerField):
+    def clean(self, value, model_instance):
+        """Convert the value's type and run validation."""
+
+        # Add support for F() expressions
+        if isinstance(value, Combinable):
+            return value
+
+        return super().clean(value, model_instance)
 
 
 class APIModel(models.Model):
@@ -39,6 +51,7 @@ class APIModel(models.Model):
 
         self.full_clean()
         self.save(update_fields=update_fields, force_update=True)
+        self.refresh_from_db()
 
     def delete(self, using=None, keep_parents=False):
         """Delete the object by just set its `is_deleted` field to True."""
