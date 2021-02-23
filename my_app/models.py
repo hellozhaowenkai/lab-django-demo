@@ -9,13 +9,25 @@ from my_site.restful.models import APIModel, APICounterField
 
 
 class MyUser(AbstractUser):
+    """
+    自定义用户
+    """
+
     pass
 
 
 class Like(APIModel):
+    """
+    点赞信息
+    """
+
+    # 当前点赞总数
     total_count = APICounterField(default=0)
+    # 最近修改操作预期增加的点赞数
     last_add_by = models.SmallIntegerField(default=0)
+    # 最近修改操作来源 IP 地址
     last_modified_by = models.GenericIPAddressField(default="172.0.0.1")
+    # 最近修改操作来源 URL 地址
     last_modified_from = models.URLField(default="http://localhost/")
 
     def update(self, **kwargs):
@@ -26,10 +38,17 @@ class Like(APIModel):
 
 
 class History(APIModel):
-    add_by = models.SmallIntegerField("本次修改操作预期增加的点赞数", default=0)
-    modified_by = models.GenericIPAddressField("本次修改操作来源 IP 地址", default="172.0.0.1")
-    modified_from = models.URLField("本次修改操作来源 URL 地址", default="http://localhost/")
-    # 所属点赞对象主键
+    """
+    历史记录
+    """
+
+    # 本次修改操作预期增加的点赞数
+    add_by = models.SmallIntegerField(default=0)
+    # 本次修改操作来源 IP 地址
+    modified_by = models.GenericIPAddressField(default="172.0.0.1")
+    # 本次修改操作来源 URL 地址
+    modified_from = models.URLField(default="http://localhost/")
+    # 所属`点赞`对象主键
     like = models.ForeignKey(Like, models.DO_NOTHING, blank=True, null=True)
 
 

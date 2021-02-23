@@ -7,6 +7,10 @@ import uuid
 
 
 class APICounterField(models.PositiveIntegerField):
+    """
+    A `PositiveIntegerField` for a counter field.
+    """
+
     def clean(self, value, model_instance):
         """Convert the value's type and run validation."""
 
@@ -25,9 +29,13 @@ class APIModel(models.Model):
     DISABLE_UPDATE_FIELDS = tuple(["uuid", "created_at"])
     AUTO_UPDATE_FIELDS = tuple(["last_modified_at"])
 
+    # 通用唯一标识符
     uuid = models.UUIDField(default=uuid.uuid4, unique=True)
+    # 创建时间 ISO 标准字符串
     created_at = models.DateTimeField(auto_now_add=True)
+    # 最近修改时间 ISO 标准字符串
     last_modified_at = models.DateTimeField(auto_now=True)
+    # 是否被标记为`已删除`
     is_deleted = models.BooleanField(default=False)
 
     def update(self, **kwargs):
