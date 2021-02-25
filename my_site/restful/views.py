@@ -142,24 +142,24 @@ class APIViewSet(SingleObjectMixin, View):
 
         try:
             response = super().dispatch(request, *args, **kwargs)
-            self.corsable(response, request)
-            return response
         except Http404:
-            error_response = ErrorAPIResponse("100100")
-            error_response.status_code = 404
-            return error_response
+            response = ErrorAPIResponse("100100")
+            response.status_code = 404
         except MultipleObjectsReturned:
-            return ErrorAPIResponse("100101")
+            response = ErrorAPIResponse("100101")
         except IntegrityError:
-            return ErrorAPIResponse("100102")
+            response = ErrorAPIResponse("100102")
         except FieldError:
-            return ErrorAPIResponse("100103")
+            response = ErrorAPIResponse("100103")
         except (ValueError, AttributeError):
-            return ErrorAPIResponse("100104")
+            response = ErrorAPIResponse("100104")
         except ValidationError:
-            return ErrorAPIResponse("100105")
+            response = ErrorAPIResponse("100105")
         except InvalidPage:
-            return ErrorAPIResponse("100300")
+            response = ErrorAPIResponse("100300")
+
+        self.corsable(response, request)
+        return response
 
     def head(self, request, *args, **kwargs):
         """Return metadata of the result for a GET response."""

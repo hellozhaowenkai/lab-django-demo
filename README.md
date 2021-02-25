@@ -21,7 +21,7 @@ python manage.py runserver --settings my_site.config.development
 ### 构建镜像
 
 ```bash
-docker build --tag lab-django-demo:latest .
+docker image build --tag lab-django-demo:latest .
 ```
 
 ### 启动容器
@@ -56,7 +56,7 @@ docker container logs lab-django-demo
 ## 依赖
 
 ### 收集依赖
-    
+
 ```bash
 # pip install pipreqs
 pipreqs .
