@@ -1,0 +1,3 @@
+[submodule "my_site/restful"]
+	path = my_site/restful
+	url = git@gitee.com:dyai/lab-django-restful.git
