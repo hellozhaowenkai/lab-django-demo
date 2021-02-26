@@ -6,6 +6,12 @@ Django 示例项目，作为相关项目的基础实践规范。
 
 ## 开发
 
+### 拉取仓库
+
+```bash
+git clone --recursive git@gitee.com:dyai/lab-django-demo.git
+```
+
 ### 启动服务
 
 ```bash
@@ -66,4 +72,29 @@ pipreqs .
 
 ```bash
 pip install -r requirements.txt
+```
+
+## 子模块开发
+
+### 添加
+
+```bash
+cd lab-django-demo
+git rm -rf ./my_site/restful/
+git submodule add git@gitee.com:dyai/lab-django-restful.git ./my_site/restful
+```
+
+### 修改
+
+```bash
+cd ./my_site/restful
+git add --all
+git commit
+git push
+```
+
+### 初始化 & 更新
+
+```bash
+git submodule update --init --recursive
 ```
