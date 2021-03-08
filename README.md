@@ -19,7 +19,7 @@ git clone --recursive git@gitee.com:dyai/lab-django-demo.git
 sh run/entry-point.sh
 
 # or
-python manage.py runserver --settings my_site.config.development
+python manage.py runserver --settings=my_site.config.development
 ```
 
 ## Docker
@@ -27,23 +27,28 @@ python manage.py runserver --settings my_site.config.development
 ### 构建镜像
 
 ```bash
-docker image build --tag lab-django-demo:latest .
+docker image build --tag=lab-django-demo:latest .
 ```
 
 ### 启动容器
 
 ```bash
 docker container run \
-  --user $(id -u) \
-  --name lab-django-demo \
-  --publish 10301:80 \
-  --volume /dyai-app/back-end/lab-django-demo/logs:/app/logs \
-  --volume /dyai-data/back-end/lab-django-demo/databases:/app/databases \
-  --env TZ=Asia/Shanghai \
+  --user=$(id -u) \
+  --name=lab-django-demo \
+  --publish=10301:8888 \
+  --volume=/dyai-app/back-end/lab-django-demo/logs:/app/logs \
+  --volume=/dyai-app/back-end/lab-django-demo/databases:/app/databases \
+  --restart=on-failure:3 \
   --interactive \
   --detach \
-  --restart unless-stopped \
   lab-django-demo:latest
+```
+
+### 重启服务
+
+```bash
+docker container restart lab-django-demo
 ```
 
 ### 删除服务
