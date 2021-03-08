@@ -74,14 +74,32 @@ pipreqs .
 pip install -r requirements.txt
 ```
 
+## 父模块开发
+
+### 克隆
+
+```bash
+git clone --recursive
+```
+
+### 拉取
+
+```bash
+git pull --recurse-submodules=on-demand
+```
+
+### 推送
+
+```bash
+git push --recurse-submodules=on-demand
+```
+
 ## 子模块开发
 
 ### 添加
 
 ```bash
-cd lab-django-demo
-git rm -rf ./my_site/restful/
-git submodule add git@gitee.com:dyai/lab-django-restful.git ./my_site/restful
+git submodule add -b master git@gitee.com:dyai/lab-django-restful.git ./my_site/restful
 ```
 
 ### 修改
@@ -96,5 +114,14 @@ git push
 ### 初始化 & 更新
 
 ```bash
-git submodule update --init --recursive
+git submodule update --init --recursive --remote
+```
+
+### 删除
+
+```bash
+git rm -rf --cached ./my_site/restful/
+vim .gitmodules
+vim .git/config
+rm -rf .git/module/my_site/restful/
 ```
