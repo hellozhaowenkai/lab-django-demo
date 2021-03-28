@@ -12,7 +12,10 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 
 
 from my_site.settings import *
+from config import settings
 
+
+SECRET_KEY = settings["secrets"]["django"]["secret-key"]
 
 DEBUG = False
 

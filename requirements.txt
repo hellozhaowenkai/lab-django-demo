@@ -1,3 +1,6 @@
+# TOML Parser
+toml==0.10.2
+
 # Django
 django==3.1.5
 

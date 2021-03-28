@@ -11,7 +11,7 @@ while getopts m:h OPT; do
       MODE=${OPTARG}
       ;;
     h)
-      echo "Usage: $(basename $0) -m [development | production | test]"
+      echo "Usage: $(basename $0) -m [development | production | testing]"
       exit
       ;;
   esac
@@ -35,7 +35,7 @@ case ${MODE} in
     uwsgi --ini run/uwsgi.ini
     ;;
 
-  test)
+  testing)
     # TEST mode
     export DJANGO_SETTINGS_MODULE=my_site.config.${MODE}
     python manage.py test

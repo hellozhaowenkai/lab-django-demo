@@ -1,0 +1,14 @@
+[host]
+username = "<host username>"
+password = "<host password>"
+
+[django]
+secret-key = "<django `SECRET_KEY`>"
+
+[tencent-cloud]
+id = "<tencent cloud `SecretID`>"
+key = "<tencent cloud `SecretKey`>"
+
+[aliyun]
+id = "<aliyun `AccessKey ID`>"
+key = "<aliyun `AccessKey Secret`>"
