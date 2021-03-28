@@ -69,8 +69,13 @@ docker container logs lab-django-demo
 ### 收集依赖
 
 ```bash
-# pip install pipreqs
-pipreqs .
+pip freeze > ./requirements.txt
+# or
+pipenv lock -r > ./requirements.txt
+# or
+poetry export --format=requirements.txt --output=./requirements.txt
+# or
+pipreqs --savepath=./requirements.txt .
 ```
 
 ### 安装依赖
