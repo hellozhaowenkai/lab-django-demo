@@ -6,9 +6,11 @@ password = "<host password>"
 secret-key = "<django `SECRET_KEY`>"
 
 [tencent-cloud]
-id = "<tencent cloud `SecretID`>"
-key = "<tencent cloud `SecretKey`>"
+app-id = "<tencent cloud `APPID`>"
+access.id = "<tencent cloud `SecretID`>"
+access.key = "<tencent cloud `SecretKey`>"
 
 [aliyun]
-id = "<aliyun `AccessKey ID`>"
-key = "<aliyun `AccessKey Secret`>"
+role-arn = "<aliyun `Role ARN`>"
+access.id = "<aliyun `AccessKey ID`>"
+access.key = "<aliyun `AccessKey Secret`>"
