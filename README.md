@@ -4,6 +4,10 @@
 
 Django 示例项目，作为相关项目的基础实践规范。
 
+## 代号
+
+`django-demo` -> `Django 示例`
+
 ## 开发
 
 ### 拉取仓库
@@ -81,7 +85,26 @@ pipreqs --savepath=./requirements.txt .
 ### 安装依赖
 
 ```bash
+# If you want to add dependencies to your project.
+pip install pendulum
+poetry add pendulum
+
+# To install the defined dependencies for your project.
 pip install -r requirements.txt
+poetry install
+```
+
+### 虚拟环境
+
+```bash
+# If you want to get basic information about the currently activated virtual environment.
+poetry env info
+# If you only want to know the path to the virtual environment.
+poetry env info --path
+# You can also list all the virtual environments associated with the current project.
+poetry env list
+# Finally, you can delete existing virtual environments.
+poetry env remove test-O3eWbxRl-py3.7
 ```
 
 ## 父模块开发
