@@ -13,7 +13,10 @@ Django 示例项目，作为相关项目的基础实践规范。
 ### 拉取仓库
 
 ```bash
+# Pull repository with submodules.
 git clone --recursive git@gitee.com:dyai/lab-django-demo.git
+# Pull repository force to overwrite local files.
+git fetch --all && git reset --hard origin/master && git pull
 ```
 
 ### 启动服务
@@ -38,12 +41,13 @@ docker image build --tag=lab-django-demo:latest .
 
 ```bash
 docker container run \
-  --user=$(id -u) \
-  --name=lab-django-demo \
-  --publish=10301:8888 \
-  --volume=/dyai-app/back-end/lab-django-demo/logs:/app/logs \
-  --volume=/dyai-app/back-end/lab-django-demo/databases:/app/databases \
-  --restart=on-failure:3 \
+  --user     $(id -u) \
+  --name     lab-django-demo \
+  --publish  10301:8888 \
+  --volume   /dyai-app/back-end/lab-django-demo/logs:/app/logs \
+  --volume   /dyai-app/back-end/lab-django-demo/databases:/app/databases \
+  --volume   /dyai-app/lab-secret/settings.private.toml:/app/config/settings.private.toml \
+  --restart  on-failure:3 \
   --interactive \
   --detach \
   lab-django-demo:latest
@@ -144,10 +148,18 @@ git commit
 git push
 ```
 
-### 初始化 & 更新
+### 初始化
 
 ```bash
-git submodule update --init --recursive --remote
+git submodule init
+```
+
+### 更新
+
+```bash
+git submodule update --remote --checkout
+git submodule update --remote --merge
+git submodule update --remote --rebase
 ```
 
 ### 删除
