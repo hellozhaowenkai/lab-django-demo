@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.dispatch import receiver
 from django.db.models.signals import pre_save, post_save
-from my_site.restful.models import APIModel, APICounterField
+from my_site.restful.models import APIModel, APICounterField, disable_for_loaddata
 
 
 # Create your models here.
@@ -52,12 +52,15 @@ class History(APIModel):
     like = models.ForeignKey(Like, models.DO_NOTHING, blank=True, null=True)
 
 
+@disable_for_loaddata
 @receiver(post_save, sender=Like)
-def post_save_receiver(sender, instance, created, **kwargs):
-    if not created:
-        History.objects.create(
-            like=instance,
-            add_by=instance.last_add_by,
-            modified_by=instance.last_modified_by,
-            modified_from=instance.last_modified_from,
-        )
+def like_post_save_receiver(sender, instance, created, **kwargs):
+    if created:
+        return
+
+    History.objects.create(
+        like=instance,
+        add_by=instance.last_add_by,
+        modified_by=instance.last_modified_by,
+        modified_from=instance.last_modified_from,
+    )

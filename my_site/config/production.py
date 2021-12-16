@@ -12,3 +12,18 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 
 
 from my_site.config.base import *
+from config import settings
+
+
+DATABASES = {
+    "sqlite3": DATABASES["sqlite3"],
+    "mysql": {
+        "ENGINE": "django.db.backends.mysql",
+        "NAME": "lab-django-demo",
+        "USER": settings["secrets"]["mysql"]["user"],
+        "PASSWORD": settings["secrets"]["mysql"]["password"],
+        "HOST": "172.17.0.1",
+        "PORT": "3306",
+    },
+}
+DATABASES["default"] = DATABASES["mysql"]

@@ -111,6 +111,31 @@ poetry env list
 poetry env remove test-O3eWbxRl-py3.7
 ```
 
+## Database
+
+### Backups
+
+```bash
+# Outputs to standard output all data in the database associated with the named application(s).
+django-admin dumpdata --exclude=auth --exclude=contenttypes --database=sqlite3 --output=foo/bar/my_data.json.gz
+# Searches for and loads the contents of the named fixture into the database.
+django-admin loaddata --exclude=auth --exclude=contenttypes --database=mysql foo/bar/my_data.json.gz
+
+# Loading from stdin is useful with standard input and output redirections.
+django-admin dumpdata --format=json --exclude=auth --exclude=contenttypes --database=sqlite3 | django-admin loaddata --format=json --exclude=auth --exclude=contenttypes --database=mysql -
+```
+
+### Flush
+
+```bash
+# Removes all data from the database and re-executes any post-synchronization handlers.
+# The table of which migrations have been applied is not cleared.
+django-admin flush
+
+# If you would rather start from an empty database and re-run all migrations, you should drop and recreate the database and then run migrate instead.
+docker container exec -i lab-mysql sh -c 'exec mysql -uroot -p"$MYSQL_ROOT_PASSWORD"' < 'DROP DATABASE IF EXISTS lab-django-demo;CREATE DATABASE IF NOT EXISTS lab-django-demo;'
+```
+
 ## 父模块开发
 
 ### 克隆
