@@ -13,7 +13,7 @@ Django 示例项目，作为相关项目的基础实践规范。
 ### 拉取仓库
 
 ```bash
-# Pull repository with submodules.
+# Clone repository with submodules.
 git clone --recursive git@gitee.com:dyai/lab-django-demo.git
 # Pull repository force to overwrite local files.
 git fetch --all && git reset --hard origin/master && git pull
@@ -22,55 +22,32 @@ git fetch --all && git reset --hard origin/master && git pull
 ### 启动服务
 
 ```bash
-# do
+# Do
 sh run/entry-point.sh
-
-# or
+# Or
 python manage.py runserver --settings=my_site.config.development
 ```
 
+## Checklist
+
+When you use this template, try follow the checklist to update your info properly:
+
+- [ ] Replace all `name` sections in project
+- [ ] Use a new port for docker container when deploying
+- [ ] Change the `base-url` value in `config/settings.toml`
+- [ ] Update the `deploy.sh`
+- [ ] Clean up the READMEs and update project's descriptions
+- [ ] Remove the `.idea` and `.vscode` folder which contains the editor info
+
+And, enjoy :)
+
 ## Docker
 
-### 构建镜像
+See [Deploy Script](deploy.sh).
 
-```bash
-docker image build --tag=lab-django-demo:latest .
-```
+## Git LFS
 
-### 启动容器
-
-```bash
-docker container run \
-  --user     $(id -u) \
-  --name     lab-django-demo \
-  --publish  10301:8888 \
-  --volume   /dyai-app/back-end/lab-django-demo/logs:/app/logs \
-  --volume   /dyai-app/back-end/lab-django-demo/databases:/app/databases \
-  --volume   /dyai-app/lab-secret/settings.private.toml:/app/config/settings.private.toml \
-  --restart  on-failure:3 \
-  --interactive \
-  --detach \
-  lab-django-demo:latest
-```
-
-### 重启服务
-
-```bash
-docker container restart lab-django-demo
-```
-
-### 删除服务
-
-```bash
-docker container rm -f lab-django-demo
-docker image rm lab-django-demo:latest
-```
-
-### 查看日志
-
-```bash
-docker container logs lab-django-demo
-```
+See [Git Large File Storage](https://git-lfs.github.com/).
 
 ## 依赖
 
@@ -78,12 +55,8 @@ docker container logs lab-django-demo
 
 ```bash
 pip freeze > ./requirements.txt
-# or
-pipenv lock -r > ./requirements.txt
-# or
+# Or
 poetry export --format=requirements.txt --output=./requirements.txt
-# or
-pipreqs --savepath=./requirements.txt .
 ```
 
 ### 安装依赖
@@ -91,24 +64,34 @@ pipreqs --savepath=./requirements.txt .
 ```bash
 # If you want to add dependencies to your project.
 pip install pendulum
+# Or
 poetry add pendulum
 
 # To install the defined dependencies for your project.
 pip install -r requirements.txt
+# Or
 poetry install
 ```
 
 ### 虚拟环境
 
 ```bash
+# Run the script within your virtual environment.
+poetry run python example.py
+# Spawn a shell within your virtual environment.
+poetry shell
+
 # If you want to get basic information about the currently activated virtual environment.
 poetry env info
 # If you only want to know the path to the virtual environment.
 poetry env info --path
 # You can also list all the virtual environments associated with the current project.
 poetry env list
+
+# You can tell Poetry which Python version to use for the current project.
+poetry env use test-O3eWbxRl-py3.9
 # Finally, you can delete existing virtual environments.
-poetry env remove test-O3eWbxRl-py3.7
+poetry env remove test-O3eWbxRl-py3.9
 ```
 
 ## Database
