@@ -21,6 +21,11 @@ DEBUG = False
 
 ALLOWED_HOSTS = ["*"]
 
+DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
+
+CSRF_COOKIE_NAME = "XSRF-TOKEN"
+CSRF_HEADER_NAME = "HTTP_X_XSRF_TOKEN"
+
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
