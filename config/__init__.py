@@ -1,11 +1,18 @@
+import os
+
+
 def __organize_settings():
-    import os
-    import toml
+    try:
+        import tomllib
+    except ModuleNotFoundError:
+        import tomli as tomllib
 
     config_path = os.path.abspath(os.path.dirname(__file__))
-    main_settings = toml.load(os.path.join(config_path, "settings.toml"))
 
+    with open(os.path.join(config_path, "settings.toml"), "rb") as f:
+        main_settings = tomllib.load(f)
     sensitive_settings = main_settings.setdefault("sensitive-settings", {})
+
     if not sensitive_settings.setdefault("enabled", False):
         return main_settings
 
@@ -13,7 +20,13 @@ def __organize_settings():
         patch_namespace = patch.get("namespace", "secrets")
         patch_filename = patch.get("filename", "settings.private.toml")
         patch_path = os.path.join(config_path, patch_filename)
-        patch_settings = toml.load(patch_path) if os.path.isfile(patch_path) else {}
+
+        if os.path.isfile(patch_path):
+            with open(os.path.join(patch_path), "rb") as f:
+                patch_settings = tomllib.load(f)
+        else:
+            patch_settings = {}
+
         main_settings.setdefault(patch_namespace, {}).update(patch_settings)
 
     return main_settings
