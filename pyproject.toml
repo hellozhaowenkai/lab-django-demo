@@ -1,49 +1,106 @@
-# [Specifying Minimum Build System Requirements for Python Projects](https://www.python.org/dev/peps/pep-0518/)
+# ==================================================
+# The new, standardized `pyproject.toml`.
+#
+# Maintainer:
+#   KevInZhao <hellozhaowenkai@gmail.com>
+# Description:
+#   A new configuration file is introduced for software packages to use to specify their build dependencies
+#   (with the expectation that the same configuration file will be used for future configuration details).
+# Note:
+#   Tools MUST specify fields defined by PEP 621 in a table named [project]. No tools may add fields
+#   to this table which are not defined by this PEP or subsequent PEPs. For tools wishing to store
+#   their own settings in pyproject.toml, they may use the [tool] table as defined in PEP 518. The
+#   lack of a [project] table implicitly means the build back-end will dynamically provide all fields.
+# Sections:
+#   - project
+#   - build-system
+#   - install-system
+#   - tool.poetry
+#   - tool.black
+# Repository:
+#   - [DotPub](https://github.com/hellozhaowenkai/dotpub/)
+# References:
+#   - [PEP 518](https://www.python.org/dev/peps/pep-0518/)
+#   - [PEP 621](https://www.python.org/dev/peps/pep-0621/)
+#   - [PEP 650](https://www.python.org/dev/peps/pep-0650/)
+# ==================================================
 
-# The [project] table is used to store project's core metadata.
+
+#
+# The `project` table is used to store project's core metadata.
+#
+
 [project]
-requires-python = ">=3.9"  # PEP 621 specifications.
-dependencies = []  # PEP 631 specifications.
+dynamic = []
 
-# The [build-system] table is used to store build-related data.
+#
+# The `build-system` table is used to store build-related data.
+#
+
 [build-system]
-requires = ["poetry-core>=1.0.0"]  # PEP 508 specifications.
+requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
 
-# The [install-system] table is used to store install-system relevant data and information.
-# [install-system]
-# requires = ["pipenv"]  # PEP 650 specifications.
-# install-backend = "pipenv.api:main"
+#
+# The `install-system` table is used to store install-system relevant data and information.
+#
 
-# The [tool] table is where any tool related to your Python project, not just build tools,
-#   can have users specify configuration data as long as they use a sub-table within [tool],
-#   e.g. the black tool would store its configuration in [tool.black].
+[install-system]
+requires = ["poetry"]
+install-backend = "poetry.console:run"
+
+#
+# The `tool` table is where any tool related to your Python project, not just build tools.
+#
+
 [tool]
 
-# [Black](https://black.readthedocs.io/)
-[tool.black]
-# [Configurations](https://black.readthedocs.io/en/stable/compatible_configs.html)
-# If you're asking yourself "Do I need to configure anything?" the answer is "No".
-#   `Black` is all about sensible defaults.
-
+#
 # [Poetry](https://python-poetry.org/)
+#
+
+# [Configurations](https://python-poetry.org/docs/pyproject/)
 [tool.poetry]
 name = "lab-django-demo"
 version = "0.1.0"
-description = ""
+description = "Opinionated Django Starter Template"
+
+license = "MIT"
 authors = ["KevInZhao <hellozhaowenkai@gmail.com>"]
+maintainers = ["KevInZhao <hellozhaowenkai@gmail.com>"]
+
+readme = "README.md"
+homepage = ""
+repository = ""
+documentation = ""
+keywords = ["back-end", "django"]
+classifiers = ["Framework :: Django", "Intended Audience :: Developers"]
 
 [tool.poetry.dependencies]
 python = "^3.9"
 tomli = { version = "^2.0.1", python = "<3.11" }
-django = "^3.1.7"
-mysqlclient = "^2.0.3"
-uwsgi = "^2.0.19"
+django = "^3.2.14"
+mysqlclient = "^2.1.1"
+uwsgi = "^2.0.20"
 
 [tool.poetry.dev-dependencies]
-black = "^20.8b1"
+black = "^22.6.0"
 
 [[tool.poetry.source]]
 default = true
 name = "tuna"
 url = "https://pypi.tuna.tsinghua.edu.cn/simple/"
+
+[tool.poetry.scripts]
+run = "my_site.wsgi:application"
+debug = "manage:main"
+
+[tool.poetry.urls]
+"bug-tracker" = ""
+
+#
+# [Black](https://black.readthedocs.io/)
+#
+
+# [Configurations](https://black.readthedocs.io/en/stable/compatible_configs.html)
+[tool.black]
