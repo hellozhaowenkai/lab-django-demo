@@ -22,9 +22,9 @@ git fetch --all && git reset --hard origin/master && git pull
 ### 启动服务
 
 ```bash
-# Do
+# DO
 sh run/entry-point.sh
-# Or
+# OR
 python manage.py runserver --settings=my_site.config.development
 ```
 
@@ -35,7 +35,7 @@ When you use this template, try follow the checklist to update your info properl
 - [ ] Replace all `name` sections in project
 - [ ] Use a new port for docker container when deploying
 - [ ] Change the `base-url` value in `config/settings.toml`
-- [ ] Update the `deploy.sh`
+- [ ] Update the `deploy.sh` and `deploy-dev.sh`
 - [ ] Clean up the READMEs and update project's descriptions
 - [ ] Remove the `.idea` and `.vscode` folder which contains the editor info
 
@@ -55,7 +55,7 @@ See [Git Large File Storage](https://git-lfs.github.com/).
 
 ```bash
 pip freeze > ./requirements.txt
-# Or
+# OR
 poetry export --format=requirements.txt --output=./requirements.txt
 ```
 
@@ -64,12 +64,12 @@ poetry export --format=requirements.txt --output=./requirements.txt
 ```bash
 # If you want to add dependencies to your project.
 pip install pendulum
-# Or
+# OR
 poetry add pendulum
 
 # To install the defined dependencies for your project.
 pip install -r requirements.txt
-# Or
+# OR
 poetry install
 ```
 
