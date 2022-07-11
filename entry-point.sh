@@ -2,6 +2,7 @@
 # TODO: Need To Be Optimized.
 
 # Default mode is DEVELOPMENT
+# export DJANGO_SETTINGS_MODULE=my_site.config.development
 MODE=development
 
 # Get options
@@ -22,6 +23,7 @@ case ${MODE} in
   development)
     # DEVELOPMENT mode
     export DJANGO_SETTINGS_MODULE=my_site.config.${MODE}
+    python manage.py collectstatic
     python manage.py makemigrations
     python manage.py migrate
     python manage.py runserver
@@ -30,6 +32,7 @@ case ${MODE} in
   production)
     # PRODUCTION mode
     export DJANGO_SETTINGS_MODULE=my_site.config.${MODE}
+    python manage.py collectstatic --no-input
     python manage.py makemigrations --no-input
     python manage.py migrate --no-input
     uwsgi --ini run/uwsgi.ini

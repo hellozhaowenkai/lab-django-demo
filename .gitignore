@@ -4,6 +4,8 @@
 # Empty directories
 /logs/*
 /databases/*
+/static/*
+/media/*
 !.gitkeep
 
 # Sensitive files
