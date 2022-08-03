@@ -6,6 +6,7 @@ filename = "settings.toml"
 [base]
 project-name = "lab-django-demo"
 base-url = "/lab/api/django-demo/"
+files-url = "/lab/data/files/django-demo/"
 
 [sensitive-settings]
 enabled = true

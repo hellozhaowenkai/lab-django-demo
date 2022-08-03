@@ -30,5 +30,5 @@ DATABASES["default"] = DATABASES["sqlite3"]
 
 FORCE_SCRIPT_NAME = settings["base"]["base-url"]
 
-STATIC_URL = FORCE_SCRIPT_NAME + STATIC_URL
-MEDIA_URL = FORCE_SCRIPT_NAME + MEDIA_URL
+STATIC_URL = settings["base"]["files-url"] + STATIC_URL
+MEDIA_URL = settings["base"]["files-url"] + MEDIA_URL
