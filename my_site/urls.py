@@ -15,7 +15,6 @@ Including another URLconf
 """
 
 
-from django.contrib import admin
 from django.urls import path, include
 from django.views.debug import default_urlconf
 from django.conf import settings
@@ -25,7 +24,6 @@ from django.conf.urls.static import static
 urlpatterns = [
     path("", include("my_app.urls")),
     path("home/", default_urlconf, name="home"),
-    path("admin/", admin.site.urls, name="admin"),
 ]
 
 # https://docs.djangoproject.com/en/3.2/howto/static-files/

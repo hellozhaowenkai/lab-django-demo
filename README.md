@@ -96,6 +96,13 @@ poetry env remove test-O3eWbxRl-py3.9
 
 ## Database
 
+### Admin
+
+```bash
+# Creates a superuser account.
+docker container exec -it lab-django-demo sh -c 'export DJANGO_SETTINGS_MODULE=my_site.config.production && python manage.py createsuperuser'
+```
+
 ### Backups
 
 ```bash
